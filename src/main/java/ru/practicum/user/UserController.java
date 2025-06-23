@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,12 +16,17 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers()
+                .stream()
+                .map(UserMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
-    public User saveNewUser(User user) {
-        return userService.saveUser(user);
+    public UserDto saveNewUser(UserDto userDto) {
+        User newUser = UserMapper.fromDto(userDto);
+        User saved = userService.saveUser(newUser);
+        return UserMapper.toDto(saved);
     }
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.practicum.user.User;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,11 +15,14 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long itemId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
@@ -34,7 +38,7 @@ public class Item {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
-        return id != null && id.equals(((Item) o).getId());
+        return itemId != null && itemId.equals(((Item) o).getItemId());
     }
 
     @Override

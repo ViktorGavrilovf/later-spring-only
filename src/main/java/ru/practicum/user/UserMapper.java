@@ -16,7 +16,7 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setRegistrationDate(user.getRegistrationDate() != null ?
                 FORMATTER.format(user.getRegistrationDate()) : null);
-        userDto.setUserState(user.getUserState() != null ? user.getUserState().toString() : null);
+        userDto.setUserState(user.getUserState() != null ? user.getUserState() : null);
         return userDto;
     }
 
@@ -26,7 +26,7 @@ public class UserMapper {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
-        user.setUserState(dto.getUserState() != null ? UserState.valueOf(dto.getUserState()) : null);
+        user.setUserState(dto.getUserState() != null ? dto.getUserState() : null);
         user.setRegistrationDate(Instant.now());
         return user;
     }

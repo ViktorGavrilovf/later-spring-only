@@ -3,10 +3,7 @@ package ru.practicum.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +21,7 @@ public class UserController {
 
     @PostMapping
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserDto saveNewUser(UserDto userDto) {
-        User newUser = UserMapper.fromDto(userDto);
-        User saved = userService.saveUser(newUser);
-        return UserMapper.toDto(saved);
+    public UserDto saveNewUser(@RequestBody UserDto userDto) {
+        return userService.saveUser(userDto);
     }
 }

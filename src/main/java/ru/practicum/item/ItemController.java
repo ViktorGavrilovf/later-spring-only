@@ -11,11 +11,6 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    @GetMapping
-    public List<ItemDto> get(@RequestHeader("X-Later-User-Id") long userId) {
-        return itemService.getItems(userId);
-    }
-
     @PostMapping
     public ItemDto add(@RequestHeader("X-Later-User-Id") Long userId,
                     @RequestBody Item item) {
@@ -26,5 +21,25 @@ public class ItemController {
     public void deleteItem(@RequestHeader("X-Later-User-Id") long userId,
                            @PathVariable(name="itemId") long itemId) {
         itemService.deleteItem(userId, itemId);
+    }
+
+    @GetMapping
+    public List<ItemDto> get(
+            @RequestHeader("X-Later-User-Id") long userId,
+            @RequestParam(name = "state", defaultValue = "unread") String state,
+            @RequestParam(name = "contentType", defaultValue = "all") String contentType,
+            @RequestParam(name = "sort", defaultValue = "newest") String sort,
+            @RequestParam(name = "limit", defaultValue = "10") int limit,
+            @RequestParam(name = "tags", required = false) List<String> tags
+    ) {
+        GetItemRequest request = new GetItemRequest();
+        request.setUserId(userId);
+        request.setState(GetItemRequest.State.valueOf(state.toUpperCase()));
+        request.setContentType(GetItemRequest.ContentType.valueOf(contentType.toUpperCase()));
+        request.setSort(GetItemRequest.Sort.valueOf(sort.toUpperCase()));
+        request.setLimit(limit);
+        request.setTags(tags);
+
+        return itemService.getItems(request);
     }
 }

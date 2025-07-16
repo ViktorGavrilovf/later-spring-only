@@ -52,6 +52,9 @@ public class Item {
     @Column(name = "date_resolved")
     private Instant dateResolved;
 
+    @Column(name = "unread", nullable = false)
+    private boolean unread = true;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

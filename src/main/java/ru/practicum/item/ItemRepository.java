@@ -8,7 +8,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findByUserId(long userId);
 
-    Item save(Item item);
-
     void deleteByUserIdAndItemId(long userId, long itemId);
 }

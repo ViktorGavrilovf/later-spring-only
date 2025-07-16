@@ -12,7 +12,8 @@ public class ItemMapper {
     public static Item mapToItem(ItemDto itemDto, User user) {
         Item item = new Item();
         item.setUser(user);
-        item.setUrl(item.getUrl());
+        item.setUserId(user.getId());
+        item.setUrl(itemDto.getUrl());
         item.setTags(itemDto.getTags());
         return item;
     }

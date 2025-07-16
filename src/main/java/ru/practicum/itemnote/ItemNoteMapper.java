@@ -25,6 +25,7 @@ public class ItemNoteMapper {
         ItemNote note = new ItemNote();
         note.setItem(item);
         note.setId(dto.getId());
+        note.setNoteText(dto.getText());
         note.setCreatedAt(Instant.now());
         return note;
     }

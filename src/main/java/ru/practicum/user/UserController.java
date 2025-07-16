@@ -20,7 +20,6 @@ public class UserController {
     }
 
     @PostMapping
-    @Transactional(propagation = Propagation.REQUIRED)
     public UserDto saveNewUser(@RequestBody UserDto userDto) {
         return userService.saveUser(userDto);
     }

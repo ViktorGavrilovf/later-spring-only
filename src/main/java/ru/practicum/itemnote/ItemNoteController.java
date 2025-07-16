@@ -30,6 +30,7 @@ public class ItemNoteController {
         return noteService.listAllItemsWithNotes(userId, from, size);
     }
 
+    @PostMapping
     public ItemNoteDto add(@RequestHeader("X-Later-User-Id") long userId,
                            @RequestBody ItemNoteDto itemNoteDto) {
         return noteService.addNewItemNote(userId, itemNoteDto);

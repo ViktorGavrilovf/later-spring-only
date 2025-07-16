@@ -13,6 +13,7 @@ import ru.practicum.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +21,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UrlMetadataRetrieverImpl metadataRetriever;
     private final UserRepository userRepository;
-
-    @Override
-    public List<ItemDto> getItems(Long userId) {
-        return ItemMapper.mapToItemDto(itemRepository.findByUserId(userId));
-    }
 
     @Override
     public ItemDto addNewItem(long userId, Item item) {
@@ -81,6 +77,32 @@ public class ItemServiceImpl implements ItemService {
         Iterable<Item> items = itemRepository.findAll(finalCondition, pageRequest);
         return ItemMapper.mapToItemDto(items);
     }
+
+    @Override
+    @Transactional
+    public ItemDto updateItem(long userId, long itemId, UpdateItemRequest request) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Вещь не найдена"));
+
+        if (!item.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("Реадктировать может только владелец");
+        }
+
+        if (request.getUnread() != null) {
+            item.setUnread(request.getUnread());
+        }
+
+        if (request.getTags() != null) {
+            if (request.getReplaceTags()) {
+                item.setTags(Set.copyOf(request.getTags()));
+            } else {
+                item.getTags().addAll(request.getTags());
+            }
+        }
+        return ItemMapper.mapToItemDto(itemRepository.save(item));
+    }
+
+
 
     private BooleanExpression makeStateCondition(GetItemRequest.State state) {
         if (state.equals(GetItemRequest.State.READ)) {

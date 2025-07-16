@@ -42,4 +42,11 @@ public class ItemController {
 
         return itemService.getItems(request);
     }
+
+    @PatchMapping("/{itemId}")
+    public ItemDto updateItem(@RequestHeader("X-Later-User-Id") long userId,
+                              @PathVariable long itemId,
+                              @RequestBody UpdateItemRequest request) {
+        return itemService.updateItem(userId, itemId, request);
+    }
 }
